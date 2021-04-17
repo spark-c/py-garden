@@ -1,6 +1,6 @@
 # deer animal
 
-from data.objects.animals import Animal.Animal
+from data.objects.animals.Animal import Animal
 import os
 
 class Deer(Animal):
@@ -8,10 +8,10 @@ class Deer(Animal):
     sprite_path_template = 'deer_gender.png'
     speed_mod = 2
 
-    def __init__(self, width=16, height=16, gender='female'):
+    def __init__(self, gender='female'):
         self.gender = gender
         self.sprite_path = os.path.join(\
             Animal.sprites_path,\
-            sprite_path_template.replace('gender', self.gender))
+            Deer.sprite_path_template.replace('gender', self.gender))
         
-        super().__init__(width, height, self.sprite_path) # passes to the Animal.__init__()
+        super().__init__(self.sprite_path) # passes to the Animal.__init__()

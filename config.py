@@ -5,6 +5,7 @@ import os
 class Config():
 
     RESOLUTION = (640, 360)
+    BG_COLOR = (0, 0, 0)
 
     def __init__(self):
         pass

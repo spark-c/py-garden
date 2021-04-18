@@ -2,15 +2,14 @@
 
 import sys
 import os
-import pygame as pygame
 
-from data import main
+from data.main import main, cfg, client
 
 if __name__ == '__main__':
-    main.main()
-    pygame.display.quit()
+    main(client)
     sys.exit()
 
+# Code below is just leftover from initial testing
 
 # def enforce_screenspace(obj):
 #     if obj.top < 0:

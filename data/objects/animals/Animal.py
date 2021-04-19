@@ -13,7 +13,7 @@ class Animal(pygame.sprite.Sprite):
     sprite_path_base = 'resources/sprites/animals/'
     movement_constraint = (0, config.Config.RESOLUTION[0])
     
-    with open('animal_config.json', 'r') as f:
+    with open('data/objects/animals/animal_config.json', 'r') as f:
         config = json.load(f)
     
     types = set(config.keys())
@@ -25,31 +25,45 @@ class Animal(pygame.sprite.Sprite):
         self.animal_type = animal_type
         self.gender = gender
 
-        self.sprite_name_base = '_'.join(self.animal_type, self.gender, 'NUM.png') # "deer_female_NUM.png"
-        self.sprite_full_path = os.path.join(Animal.sprite_path_base, self.sprite_name_base)
+        self.sprite_name_base = self.animal_type + '_' + self.gender + 'NUM.png' # "deer_female_NUM.png"
+        self.sprite_full_path = os.path.join(os.getcwd(), Animal.sprite_path_base, self.sprite_name_base)
 
-        self.image = pygame.image.load(self.sprite_full_path)
+        self.image = pygame.image.load(self.sprite_full_path.replace('NUM', '0'))
         self.rect = self.image.get_rect()
 
         self.head = self.rect.left # later we will update this according to sprite's facing
         self.speed = [0, 0]
+        self.speed_mod = Animal.config[animal_type]['speed_mod']
+
+        self.state = 'bored'
+        self.dest_point = None
+        self.dest_area = None
     
 
     ### ACTIONS
 
     def wander(self): # pick spot and move there.
-        print("Finding place...")
-        point = random.randint(Animal.movement_constraint[0], Animal.movement_constraint[1]) # target destination
-        area = (point-5, point+5) # acceptable range
-        print(f"Going to {point}!")
+        if self.state != 'wandering': self.change_state('wandering')
 
-        while self.head < area[0] or self.head > area[1]: # accepts being "close enough"
-            if self.head > point:
+        if self.dest_point == None:
+            print("Finding place...")
+
+            self.dest_point = random.randint(Animal.movement_constraint[0], Animal.movement_constraint[1]) # target destination
+            self.dest_area = (self.dest_point-10, self.dest_point+10) # acceptable range
+
+            print(f"Going to {self.dest_point}!")
+
+        if self.head < self.dest_area[0] or self.head > self.dest_area[1]: # accepts being "close enough"
+            if self.head > self.dest_point:
                 self.speed = [-1, 0]
-            if self.head < point:
+            if self.head < self.dest_point:
                 self.speed = [1, 0]
-        self.speed = [0, 0]
-        print('Made it!')
+            print(self.speed)
+        else:
+            self.dest_point = None
+            self.speed = [0, 0]
+            print('Made it!')
+            self.change_state('idle')
 
 
     def exit(self): # wander offscreen and cleanup self
@@ -66,5 +80,11 @@ class Animal(pygame.sprite.Sprite):
 
     ### UTILITY
 
-    def draw(self):
-        pass
+    def change_state(self, state):
+        self.state = state
+        print(f'state is {state}')
+
+    def update(self):
+        self.rect = self.rect.move([s * self.speed_mod for s in self.speed])
+        self.head = self.rect.left
+        print(f'location: {self.head}')

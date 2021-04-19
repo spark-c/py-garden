@@ -9,4 +9,14 @@ class Client():
         self.screen = pygame.display.set_mode(cfg.RESOLUTION)
         self.screen_rect = self.screen.get_rect()
         self.bg_color = cfg.BG_COLOR
+        self.background = pygame.Surface(cfg.RESOLUTION)
+        self.set_background(self.bg_color)
+
         self.clock = pygame.time.Clock()
+        self.fps = 30
+
+        self.ground_level = cfg.RESOLUTION[1] - 30
+
+    
+    def set_background(self, color):
+        self.background.fill(color)

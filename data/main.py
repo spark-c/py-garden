@@ -14,23 +14,35 @@ client = Client(cfg)
 pygame.init()
 
 ### IMPORT SPRITES ###
-from data.objects.animals import *
+from data.objects.animals.Animal import *
 
 
 def main(client):
 
-    d = Deer()
+    d = Animal()
+    all_animals = pygame.sprite.Group()
+    all_animals.add(d)
+
+    ### MAIN LOOP ###
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 sys.exit()
-        d.rect = d.rect.move(1, 0)
 
-        client.screen.fill(client.bg_color)
-        client.screen.blit(d.image, d.rect)
+        ### EVENTS ###
+        for sprite in all_animals.sprites():
+            sprite.wander()
+
+        ### DRAW ENVIRONMENT ###
+        client.screen.blit(client.background, client.screen_rect)
+
+        ### DRAW OBJECTS ###
+        all_animals.update()
+        all_animals.draw(client.screen)
+
         pygame.display.flip()
 
-        client.clock.tick(30)
+        client.clock.tick(client.fps)
 
     pygame.display.quit()

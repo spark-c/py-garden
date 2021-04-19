@@ -15,8 +15,6 @@ class Client():
         self.clock = pygame.time.Clock()
         self.fps = 30
 
-        self.ground_level = cfg.RESOLUTION[1] - 30
-
     
     def set_background(self, color):
         self.background.fill(color)

@@ -19,7 +19,7 @@ class Animal(pygame.sprite.Sprite):
     types = set(config.keys())
 
 
-    def __init__(self, animal_type='deer', gender='female'): # args received from subclass e.g. Deer
+    def __init__(self, ground=None, animal_type='deer', gender='female'): # args received from subclass e.g. Deer
         super().__init__() # passes to the Sprite.__init__()
 
         self.animal_type = animal_type
@@ -28,14 +28,17 @@ class Animal(pygame.sprite.Sprite):
         self.sprite_name_base = self.animal_type + '_' + self.gender + 'NUM.png' # "deer_female_NUM.png"
         self.sprite_full_path = os.path.join(os.getcwd(), Animal.sprite_path_base, self.sprite_name_base)
 
-        self.image = pygame.image.load(self.sprite_full_path.replace('NUM', '0'))
+        self.image = pygame.image.load(self.sprite_full_path.replace('NUM', '0')).convert()
         self.rect = self.image.get_rect()
+
+        self.rect.bottom = ground.rect.top if ground else config.Config.RESOLUTION[1] - 41
 
         self.head = self.rect.left # later we will update this according to sprite's facing
         self.speed = [0, 0]
-        self.speed_mod = Animal.config[animal_type]['speed_mod']
+        self.speed_mod = int(Animal.config[animal_type]['speed_mod'])
 
         self.state = 'bored'
+        self.movement_constraint = (ground.rect.left, ground.rect.right) if ground else (0, config.Config.RESOLUTION[0])
         self.dest_point = None
         self.dest_area = None
     
@@ -48,7 +51,7 @@ class Animal(pygame.sprite.Sprite):
         if self.dest_point == None:
             print("Finding place...")
 
-            self.dest_point = random.randint(Animal.movement_constraint[0], Animal.movement_constraint[1]) # target destination
+            self.dest_point = random.randint(self.movement_constraint[0], self.movement_constraint[1]) # target destination
             self.dest_area = (self.dest_point-10, self.dest_point+10) # acceptable range
 
             print(f"Going to {self.dest_point}!")

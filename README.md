@@ -20,6 +20,6 @@ Instructions are currently written according to my Windows 10 machine.
 * `pip install -r requirements.txt` to install dependencies for the project.
 * Now you can run the game with the command `py run.py`!
 
-Please see the wiki tab for some more detailed information about the project structure and configuration!
+Please see the [wiki](https://github.com/spark-c/py-garden/wiki) tab for some more detailed information about the project structure and configuration!
 
 

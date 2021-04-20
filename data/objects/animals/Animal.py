@@ -89,9 +89,9 @@ class Animal(pygame.sprite.Sprite):
 
     def idle(self):
         if self.frames_in_state > self.state_exit_trigger:
-                self.change_state('wandering')
-            else:
-                self.frames_in_state += 1
+            self.change_state('wandering')
+        else:
+            self.frames_in_state += 1
     
     
     def exit(self): # wander offscreen and cleanup self

@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from data.Client import Client
+import data.StateManager as sm
 import config
 
 
@@ -23,18 +24,17 @@ def main(client):
     
     client.screen.blit(client.background, client.screen_rect)
     
-    ground_group = pygame.sprite.Group()
-    ga = Ground(floor_level=300, width=200, start=200)
-    gb = Ground(floor_level=100, width=100)
-    ground_group.add(ga)
-    ground_group.add(gb)
+    g = Ground(floor_level=60)
+    ground_group = pygame.sprite.Group(g)
     ground_group.draw(client.screen)
     
-    d = Animal(ground=ga)
-    e = Animal(ground=gb)
-    all_animals = pygame.sprite.Group()
-    all_animals.add(d)
-    all_animals.add(e)
+    d = Animal(ground=g)
+    e = Animal(ground=g)
+
+    ### GROUPS ###
+    all_animals = pygame.sprite.Group(d, e)
+
+    sm.idle.add(d, e)
 
     ### MAIN LOOP ###
     while True:
@@ -44,8 +44,12 @@ def main(client):
                 sys.exit()
 
         ### EVENTS ###
-        for sprite in all_animals.sprites():
+        for sprite in sm.idle.sprites():
+            sprite.idle()
+        
+        for sprite in sm.wandering.sprites():
             sprite.wander()
+
 
         ### DRAW ENVIRONMENT ###
 

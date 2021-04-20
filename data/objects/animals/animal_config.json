@@ -1,5 +1,9 @@
 {
     "deer": {
-        "speed_mod": "2"
+        "speed_mod": "2",
+        "min_idle_seconds": "2",
+        "max_idle_seconds": "20",
+        "min_eating_seconds": "2",
+        "max_eating_seconds": "5"
     }
 }

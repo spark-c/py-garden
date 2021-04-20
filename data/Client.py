@@ -13,7 +13,7 @@ class Client():
         self.set_background(self.bg_color)
 
         self.clock = pygame.time.Clock()
-        self.fps = 30
+        self.fps = cfg.CLIENT_FPS
 
     
     def set_background(self, color):

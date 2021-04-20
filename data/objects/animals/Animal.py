@@ -126,7 +126,7 @@ class Animal(pygame.sprite.Sprite):
         self.state_exit_trigger = random.randint(\
             self.state_constraints[state]['min_frames'],\
             self.state_constraints[state]['max_frames'])
-        print(f"I'll leave this state in {self.state_exit_trigger / 60} seconds!")
+        print(f"I'll leave this state in {self.state_exit_trigger // 60} seconds!")
 
 
     def update(self):

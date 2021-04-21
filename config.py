@@ -5,9 +5,9 @@ import os
 class Config():
 
     RESOLUTION = (640, 360)
+    # RESOLUTION = (1280, 720)
     BG_COLOR = (0, 0, 255)
     CLIENT_FPS = 60
-    COLORKEY = (0, 0, 0)
 
     def __init__(self):
         pass

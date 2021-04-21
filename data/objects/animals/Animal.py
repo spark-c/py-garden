@@ -14,7 +14,6 @@ class Animal(pygame.sprite.Sprite):
     
     sprite_path_base = 'resources/sprites/animals/'
     movement_constraint = (0, config.Config.RESOLUTION[0])
-    colorkey = config.Config.COLORKEY # naming confict if placed below config = json.load(f)
     
     with open('data/objects/animals/animal_config.json', 'r') as f:
         config = json.load(f)
@@ -34,8 +33,7 @@ class Animal(pygame.sprite.Sprite):
         self.sprite_name_base = self.animal_type + '_' + self.gender + 'NUM.png' # "deer_female_NUM.png"
         self.sprite_full_path = os.path.join(os.getcwd(), Animal.sprite_path_base, self.sprite_name_base)
 
-        self.image = pygame.image.load(self.sprite_full_path.replace('NUM', '0')).convert()
-        self.image.set_colorkey(Animal.colorkey)
+        self.image = pygame.image.load(self.sprite_full_path.replace('NUM', '0')).convert_alpha()
         self.rect = self.image.get_rect()
 
         self.rect.bottom = ground.rect.top if ground else config.Config.RESOLUTION[1] - 41

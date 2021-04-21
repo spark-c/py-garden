@@ -7,4 +7,5 @@ import pygame
 all_sprites = pygame.sprite.Group()
 animals = pygame.sprite.Group()
 grounds = pygame.sprite.Group()
+items = pygame.sprite.Group()
 cursor = pygame.sprite.Group()

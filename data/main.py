@@ -19,6 +19,7 @@ pygame.mouse.set_visible(False)
 ### IMPORT SPRITES ###
 from data.objects.animals.Animal import *
 from data.objects.environment.Ground import *
+from data.objects.items.Item import *
 from data.objects.ui.Cursor import Cursor
 
 
@@ -28,6 +29,8 @@ def main(client):
     
     d = Animal(ground=g)
     e = Animal(ground=g)
+
+    # a = Item()
 
     cursor = Cursor()
 
@@ -63,6 +66,7 @@ def main(client):
 
         om.grounds.draw(client.screen)
         om.animals.draw(client.screen)
+        om.items.draw(client.screen)
         om.cursor.draw(client.screen)
 
 

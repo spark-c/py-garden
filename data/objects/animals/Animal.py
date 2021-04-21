@@ -6,6 +6,7 @@ import os
 import json
 
 import data.StateManager as sm
+import data.ObjectManager as om
 import config
 
 
@@ -57,6 +58,9 @@ class Animal(pygame.sprite.Sprite):
         self.state = 'idle'
         self.frames_in_state = 0
         self.state_exit_trigger = 60 # wait 1 second after init, then wander
+
+
+        self.join_groups()
 
 
 
@@ -132,3 +136,9 @@ class Animal(pygame.sprite.Sprite):
     def update(self):
         self.rect = self.rect.move([s * self.speed_mod for s in self.speed])
         self.head = self.rect.left
+
+
+    def join_groups(self):
+        om.all_sprites.add(self)
+        om.animals.add(self)
+        sm.idle.add(self)

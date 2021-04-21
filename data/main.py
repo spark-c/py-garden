@@ -5,6 +5,7 @@ import pygame
 
 from data.Client import Client
 import data.StateManager as sm
+import data.ObjectManager as om
 import config
 
 
@@ -23,24 +24,13 @@ from data.objects.ui.Cursor import Cursor
 
 def main(client):
 
-    
-    client.screen.blit(client.background, client.screen_rect)
-    all_sprites = pygame.sprite.Group()
-    
     g = Ground(floor_level=60)
-    ground_group = pygame.sprite.Group(g)
-    ground_group.draw(client.screen)
     
     d = Animal(ground=g)
     e = Animal(ground=g)
 
     cursor = Cursor()
-    cursor_group = pygame.sprite.Group(cursor)
 
-    ### GROUPS ###
-    all_animals = pygame.sprite.Group(d, e)
-
-    sm.idle.add(d, e)
 
     ### MAIN LOOP ###
     while True:
@@ -60,25 +50,20 @@ def main(client):
         for sprite in sm.wandering.sprites():
             sprite.wander()
 
-        all_sprites.add(\
-            all_animals.sprites(),
-            ground_group.sprites(),
-            cursor_group.sprites()
-        )
 
-        ### DRAW ENVIRONMENT ###
+        ### UPDATE OBJECTS ###
+        om.all_sprites.update()
 
 
         ### DRAW OBJECTS ###
-        all_sprites.update()
+        client.screen.blit(client.background, client.screen_rect)
 
-        all_animals.clear(client.screen, client.background)
-        cursor_group.clear(client.screen, client.background)
-        all_animals.draw(client.screen)
+        om.animals.clear(client.screen, client.background)
+        om.cursor.clear(client.screen, client.background)
 
-        ground_group.draw(client.screen)
-
-        cursor_group.draw(client.screen)
+        om.grounds.draw(client.screen)
+        om.animals.draw(client.screen)
+        om.cursor.draw(client.screen)
 
 
         pygame.display.flip()

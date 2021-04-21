@@ -4,6 +4,7 @@ import pygame
 import os
 
 import config
+import data.ObjectManager as om
 
 
 class Ground(pygame.sprite.Sprite):
@@ -23,6 +24,13 @@ class Ground(pygame.sprite.Sprite):
 
         self.rect.bottom = config.Config.RESOLUTION[1]
 
+        self.join_groups()
+
     
     def update(self):
         pass
+
+
+    def join_groups(self):
+        om.all_sprites.add(self)
+        om.grounds.add(self)

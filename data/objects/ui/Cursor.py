@@ -3,6 +3,8 @@
 import pygame
 import os
 
+import data.ObjectManager as om
+
 
 class Cursor(pygame.sprite.Sprite):
 
@@ -19,6 +21,10 @@ class Cursor(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.position = pygame.mouse.get_pos()
 
+        self.join_groups()
+
+        
+
 
     def update(self):
         self.position = pygame.mouse.get_pos()
@@ -26,12 +32,17 @@ class Cursor(pygame.sprite.Sprite):
         if self.clicking == False:
             self.image = self.sprites['not_click']
             self.rect = self.image.get_rect()
-            self.rect.center = self.position
+            self.rect.topleft = self.position
         
         elif self.clicking == True:
             self.image = self.sprites['click']
             self.rect = self.image.get_rect()
-            self.rect.center = self.position
+            self.rect.topleft = self.position
+
+    
+    def join_groups(self):
+        om.all_sprites.add(self)
+        om.cursor.add(self)
 
 
 

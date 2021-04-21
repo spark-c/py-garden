@@ -9,7 +9,8 @@ import data.ObjectManager as om
 
 class Ground(pygame.sprite.Sprite):
 
-    
+    colorkey = config.Config.COLORKEY
+
     def __init__(self, floor_level=40, width=None, start=0):
         super().__init__()
         self.width = width if width else config.Config.RESOLUTION[0]
@@ -19,6 +20,7 @@ class Ground(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((self.width, self.height))
         self.image.fill((0, 255, 0))
+        self.image.set_colorkey(Ground.colorkey)
         self.rect = self.image.get_rect()
         self.rect.left = start
 

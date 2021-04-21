@@ -4,11 +4,13 @@ import pygame
 import os
 
 import data.ObjectManager as om
+import config
 
 
 class Cursor(pygame.sprite.Sprite):
 
     sprite_path_base = 'resources/sprites/ui/'
+    colorkey = config.Config.COLORKEY
 
     def __init__(self):
         super().__init__()
@@ -18,6 +20,7 @@ class Cursor(pygame.sprite.Sprite):
             'not_click': pygame.image.load(os.path.join(self.sprite_path_base, 'cursor_0.png')).convert()
         }
         self.image = self.sprites['not_click']
+        self.image.set_colorkey(Cursor.colorkey)
         self.rect = self.image.get_rect()
         self.position = pygame.mouse.get_pos()
 
@@ -38,6 +41,8 @@ class Cursor(pygame.sprite.Sprite):
             self.image = self.sprites['click']
             self.rect = self.image.get_rect()
             self.rect.topleft = self.position
+
+        self.image.set_colorkey(Cursor.colorkey)
 
     
     def join_groups(self):

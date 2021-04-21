@@ -6,8 +6,9 @@ class Config():
 
     RESOLUTION = (640, 360)
     # RESOLUTION = (1280, 720)
-    BG_COLOR = (0, 0, 255)
+    BG_COLOR = (135,206,250)
     CLIENT_FPS = 60
+    GRAVITY_INCREMENT = .4
 
     def __init__(self):
         pass

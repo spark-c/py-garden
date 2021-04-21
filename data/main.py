@@ -34,17 +34,24 @@ def main(client):
 
     cursor = Cursor()
 
-
+    make_item = False
     ### MAIN LOOP ###
     while True:
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 cursor.clicking = True
+                Item()
             if event.type == pygame.MOUSEBUTTONUP:
                 cursor.clicking = False
+                
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                make_item = True 
+            if event.type == pygame.KEYUP and event.key == pygame.K_SPACE: 
+                make_item = False
 
         ### EVENTS ###
         for sprite in sm.idle.sprites():
@@ -53,6 +60,8 @@ def main(client):
         for sprite in sm.wandering.sprites():
             sprite.wander()
 
+        if make_item:
+            Item()
 
         ### UPDATE OBJECTS ###
         om.all_sprites.update()

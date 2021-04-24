@@ -37,6 +37,21 @@ class Item(pygame.sprite.Sprite):
                 self.gravity_counter += config.Config.GRAVITY_INCREMENT
                 self.rect = self.rect.move(self.speed[0], int(self.speed[1] + self.gravity_counter)) # int() rounds the speed down until it hits next number
 
+        ### Manage nearby relationships ###
+        for animal in om.animals.sprites():
+            dist = abs(animal.head - self.rect.center[0])
+
+            if dist < 200 and self.speed == [0, 0]: # wait until the item is on the ground
+                animal.nearby_food.add(self)
+                if 0 < dist < 5:
+                    animal.in_eating_range.add(self)
+
+            else:
+                animal.nearby_food.remove(self)
+            
+            if animal.in_eating_range.has(self) and dist > 5:
+                self.remove(animal.in_eating_range)
+
 
     def get_max_y(self):
         highest = 0

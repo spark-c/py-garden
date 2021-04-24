@@ -61,6 +61,9 @@ class Animal(pygame.sprite.Sprite):
         self.frames_in_state = 0
         self.state_exit_trigger = 60 # wait 1 second after init, then wander
 
+        self.nearby_food = pygame.sprite.Group()
+        self.in_eating_range = pygame.sprite.Group()
+        self.food_eaten = 0
 
         self.join_groups()
 
@@ -73,12 +76,15 @@ class Animal(pygame.sprite.Sprite):
 
     def wander(self): # pick spot and move there.
         if self.dest_point == None:
-            print("Finding place...")
+            food = self.check_nearby_food()
+            if food:
+                print('Food nearby!')
+                self.dest_point = food
+            else:
+                print('I don\'t see food')
+                self.dest_point = random.randint(self.movement_constraint[0], self.movement_constraint[1]) # target destination
 
-            self.dest_point = random.randint(self.movement_constraint[0], self.movement_constraint[1]) # target destination
-            self.dest_area = (self.dest_point-10, self.dest_point+10) # acceptable range
-
-            print(f"Going to {self.dest_point}!")
+            self.dest_area = (self.dest_point-2, self.dest_point+2) # acceptable range
 
         if self.head < self.dest_area[0] or self.head > self.dest_area[1]: # accepts being "close enough"
             if self.head > self.dest_point:
@@ -88,13 +94,20 @@ class Animal(pygame.sprite.Sprite):
         else:
             self.dest_point = None
             self.speed = [0, 0]
-            print('Made it!')
-            ### Implement checking if food is nearby, in which case we go to "eating" instead.
-            self.change_state('idle')
+
+            if len(self.in_eating_range) > 0:
+                self.change_state('eating')
+            else:
+                self.change_state('idle')
+        
+        if len(self.in_eating_range) > 0: # repeated so that we will notice if we accidentally walk over food
+            self.dest_point = None
+            self.speed = [0, 0]
+            self.change_state('eating')
 
 
     def idle(self):
-        if self.frames_in_state > self.state_exit_trigger:
+        if len(self.nearby_food.sprites()) > 0 or self.frames_in_state > self.state_exit_trigger: # if food is nearby or if it's time to wander
             self.change_state('wandering')
         else:
             self.frames_in_state += 1
@@ -105,18 +118,28 @@ class Animal(pygame.sprite.Sprite):
 
 
     def eat(self): # eat animation and cleanup nearby food sprite
-        pass
+        if self.frames_in_state > self.state_exit_trigger:
+            for item in self.in_eating_range.sprites():
+                item.kill()
+            self.change_state('idle')
+        else:
+            self.frames_in_state += 1
 
 
     def emote(self, emote_type): # may implement little emote bubbles
         pass
 
 
+    def check_nearby_food(self): # check whether there is food nearby. returns coords or None.
+        for item in om.items.sprites():
+            if item.rect.bottom == self.rect.bottom and abs(item.rect.center[0] - self.rect.center[0]) < 200:
+                return item.rect.center[0]
+
+        return None 
+
+
     ### UTILITY ###
     def change_state(self, state):
-
-        print("Changing state!")
-
         self.frames_in_state = 0
 
         if state != 'wandering':
@@ -125,14 +148,13 @@ class Animal(pygame.sprite.Sprite):
         sm.swap_state_group(self, state)
         self.state = state
 
-        print(f'state is now {state}')
 
 
     def set_exit_trigger(self, state):
         self.state_exit_trigger = random.randint(\
             self.state_constraints[state]['min_frames'],\
             self.state_constraints[state]['max_frames'])
-        print(f"I'll leave this state in {self.state_exit_trigger // 60} seconds!")
+        print(f"Exiting state {self.state} in {self.state_exit_trigger // 60}")
 
 
     def update(self):

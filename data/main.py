@@ -60,6 +60,9 @@ def main(client):
         for sprite in sm.wandering.sprites():
             sprite.wander()
 
+        for sprite in sm.eating.sprites():
+            sprite.eat()
+
         if make_item:
             Item()
 

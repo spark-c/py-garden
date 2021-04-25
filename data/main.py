@@ -35,6 +35,8 @@ def main(client):
     cursor = Cursor()
 
     make_item = False
+
+    debug_score_timer = 0 # for printing score every 5 seconds
     ### MAIN LOOP ###
     while True:
         
@@ -68,6 +70,17 @@ def main(client):
 
         ### UPDATE OBJECTS ###
         om.all_sprites.update()
+
+
+        ### UPDATE CLIENT / SCORE ###
+        # This should get abstracted into Client.py --> client.update_score()
+
+        client.total_food_eaten = sum(animal.food_eaten for animal in om.animals.sprites())
+        if debug_score_timer == 300:
+            print(f"Current food eaten: {client.total_food_eaten}")
+            debug_score_timer = 0
+        else:
+            debug_score_timer += 1
 
 
         ### DRAW OBJECTS ###

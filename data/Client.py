@@ -15,6 +15,10 @@ class Client():
         self.clock = pygame.time.Clock()
         self.fps = cfg.CLIENT_FPS
 
+        ### PLAYER / GAME VARS ###
+        self.food_bag = 999
+        self.total_food_eaten = 0
+
     
     def set_background(self, color):
         self.background.fill(color)

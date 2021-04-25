@@ -120,7 +120,9 @@ class Animal(pygame.sprite.Sprite):
     def eat(self): # eat animation and cleanup nearby food sprite
         if self.frames_in_state > self.state_exit_trigger:
             for item in self.in_eating_range.sprites():
-                item.kill()
+                if item.alive(): # to prevent another animal getting food_eaten credit despite item being already gone
+                    item.kill()
+                    self.food_eaten += 1
             self.change_state('idle')
         else:
             self.frames_in_state += 1

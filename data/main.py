@@ -92,6 +92,7 @@ def main(client):
         om.grounds.draw(client.screen)
         om.animals.draw(client.screen)
         om.items.draw(client.screen)
+        om.buttons.draw(client.screen)
         om.cursor.draw(client.screen)
 
 
